@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dexo Boost - Home</title>
+    <link rel="stylesheet" href="home.css">
+    <!-- FontAwesome ikonkalari uchun -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Asosiy Konteyner -->
+    <div class="app-container">
+        
+        <!-- Header: Profil va Balans -->
+        <header class="header">
+            <div class="user-info">
+                <img id="user-avatar" src="https://via.placeholder.com/40" alt="Avatar">
+                <span id="user-name">Yuklanmoqda...</span>
+            </div>
+            <div class="balance-card">
+                <i class="fa-solid fa-coins coin-icon"></i>
+                <span id="user-balance">0</span> <small>DEXO</small>
+            </div>
+        </header>
+
+        <!-- Asosiy Kontent -->
+        <main class="content">
+            <section class="welcome-section">
+                <h1>Kanallarga obuna bo'ling</h1>
+                <p>Vazifalarni bajaring va tangalar ishlab, o'z kanalingizni ko'taring!</p>
+            </section>
+
+            <!-- Vazifalar Ro'yxati -->
+            <div class="tasks-container">
+                <h3>Mavjud vazifalar</h3>
+                <div id="tasks-list">
+                    <!-- Dinamik ravishda JS orqali yuklanadi -->
+                    <div class="task-loading">Vazifalar yuklanmoqda...</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Pastki Navigatsiya Paneli (Bottom Navigation) -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="create.html" class="nav-item">
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>Create Task</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- Firebase SDK va Skriptlar -->
+    <script type="module" src="home.js"></script>
+</body>
+</html>

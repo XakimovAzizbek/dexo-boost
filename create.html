@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dexo Boost - Create Task</title>
+    <link rel="stylesheet" href="create.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <header class="header">
+            <div class="page-title">
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>Yangi Vazifa</span>
+            </div>
+            <div class="balance-card">
+                <i class="fa-solid fa-coins coin-icon"></i>
+                <span id="user-balance">0</span> <small>DEXO</small>
+            </div>
+        </header>
+
+        <main class="content">
+            <div class="info-box">
+                <p><i class="fa-solid fa-circle-info"></i> <strong>Muhim shart:</strong> Vazifa yaratishdan oldin botimizni kanalingizga <strong>Admin</strong> qilishingiz va unga post qo'shish huquqini berishingiz shart!</p>
+                <p class="rate-text">Tarif: 1 ta obunachi = <span class="highlight">4 DEXO</span></p>
+            </div>
+
+            <form id="create-task-form" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="channel-link">Kanal havolasi (yoki @username)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-link input-icon"></i>
+                        <input type="text" id="channel-link" placeholder="https://t.me/kanal_nomi yoki @kanal_nomi" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sub-count">Kerakli obunachilar soni</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-users input-icon"></i>
+                        <input type="number" id="sub-count" min="5" placeholder="Minimal 5 ta" required>
+                    </div>
+                </div>
+
+                <div class="calc-box">
+                    <div class="calc-row">
+                        <span>Umumiy xarajat:</span>
+                        <span id="total-price" class="price-value">0 DEXO</span>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-btn">
+                    <span id="btn-text">Vazifa Yaratish</span>
+                    <div id="btn-loader" class="loader hidden"></div>
+                </button>
+            </form>
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="create.html" class="nav-item active">
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>Create Task</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <script type="module" src="create.js"></script>
+</body>
+</html>
