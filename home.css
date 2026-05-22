@@ -32,45 +32,41 @@ body {
                 radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 40%);
 }
 
-/* Mobil mobil o'lchamdagi konteyner */
+/* Mobil o'lchamdagi konteyner */
 .container {
     padding: 20px;
     width: 100%;
     max-width: 500px;
-    margin: 0 auto;
 }
 
-/* Shaffof oyna (Glassmorphism) effekti */
+/* Shishasimon oyna effekti (Glassmorphism) */
 .glass-card {
     background: rgba(30, 41, 59, 0.45);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 20px;
     padding: 20px;
-    margin-bottom: 16px;
+    margin-bottom: 15px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-    text-align: center;
 }
 
-/* Header qismi */
+/* Profil qismi */
 .user-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
 }
 
 .user-details {
     display: flex;
     align-items: center;
     gap: 12px;
-    text-align: left;
 }
 
 .user-details img {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     border: 2px solid #3b82f6;
     object-fit: cover;
@@ -84,36 +80,39 @@ body {
 
 .user-details p {
     font-size: 12px;
-    color: #94a3b8;
+    color: #64748b;
+    margin-top: 1px;
 }
 
-/* Balans badge */
+/* Tanga balansi */
 .balance-badge {
     background: linear-gradient(135deg, #f59e0b, #d97706);
     padding: 8px 14px;
     border-radius: 14px;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
+    color: #ffffff;
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #ffffff;
     box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
 }
 
-.balance-badge i {
-    animation: bounce 2s infinite alternate;
+/* Banner qismi */
+.banner {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 41, 59, 0.5));
+    text-align: center;
+    padding: 24px 20px;
 }
 
-/* Banner qismi */
 .banner h1 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 800;
-    margin-bottom: 6px;
     background: linear-gradient(90deg, #3b82f6, #22c55e);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: 1px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
 }
 
 .banner p {
@@ -164,37 +163,59 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    z-index: 100;
     padding-bottom: env(safe-area-inset-bottom);
-    z-index: 999;
 }
 
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-decoration: none;
     color: #64748b;
-    gap: 5px;
+    text-decoration: none;
     font-size: 11px;
     font-weight: 500;
-    transition: all 0.25s ease;
-    width: 25%;
+    gap: 4px;
+    transition: color 0.2s ease;
+    width: 60px;
 }
 
 .nav-item i {
     font-size: 20px;
 }
 
-.nav-item:active {
-    transform: scale(0.9);
-}
-
 .nav-item.active {
     color: #3b82f6;
-    text-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
 }
 
-@keyframes bounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-3px); }
+/* PROFILGA KIRISH YANGI TUGMA STILI */
+.home-profile-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px !important;
+    margin-top: 5px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(15, 23, 42, 0.4)) !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.home-profile-btn i {
+    font-size: 18px;
+    color: #3b82f6;
+}
+
+.home-profile-btn span {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Tugma bosilgandagi animatsiya */
+.home-profile-btn:active {
+    transform: scale(0.97);
+    background: rgba(59, 130, 246, 0.25) !important;
 }
