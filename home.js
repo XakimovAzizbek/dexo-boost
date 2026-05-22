@@ -1,115 +1,72 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, set, onValue } from "firebase/database";
+const tg = window.Telegram.WebApp;
+const userData = tg.initDataUnsafe.user;
+const BASE_URL = "https://69b1056aadac80b427c3bc97.mockapi.io";
 
-// Firebase konfiguratsiyasi
-const firebaseConfig = {
-  apiKey: "AIzaSyAxZ-mSgJhuTdGcH3T4oJym3qjGso71keM",
-  authDomain: "user1111-c84a0.firebaseapp.com",
-  databaseURL: "https://user1111-c84a0-default-rtdb.firebaseio.com",
-  projectId: "user1111-c84a0",
-  storageBucket: "user1111-c84a0.firebasestorage.app",
-  messagingSenderId: "901723757936",
-  appId: "1:901723757936:web:c94a330b79916b6b0c03b5",
-  measurementId: "G-W1WPZHRJX8"
-};
-
-// Firebase-ni ishga tushirish
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// Telegram WebApp obyektini olish
-const tg = window.Telegram?.WebApp;
-
-// Standart (Test) ma'lumotlar - Agar Telegram ichida ochilmasa ishlashi uchun
-let userId = "123456789";
-let userName = "Dexo Developer";
-
-if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    tg.expand(); // Mini Appni to'liq ekranga ochish
-    userId = tg.initDataUnsafe.user.id.toString();
-    userName = tg.initDataUnsafe.user.first_name;
-    if (tg.initDataUnsafe.user.photo_url) {
-        document.getElementById("user-avatar").src = tg.initDataUnsafe.user.photo_url;
-    }
-}
-
-// DOM elementlar
-const userNameEl = document.getElementById("user-name");
-const userBalanceEl = document.getElementById("user-balance");
-const tasksListEl = document.getElementById("tasks-list");
-
-userNameEl.textContent = userName;
-
-// 1. Foydalanuvchi balansini Firebase'dan olish va real-vaqtda kuzatish
-const userRef = ref(db, 'users/' + userId);
-
-onValue(userRef, (snapshot) => {
-    if (snapshot.exists()) {
-        const data = snapshot.val();
-        userBalanceEl.textContent = data.balance || 0;
-    } else {
-        // Yangi foydalanuvchi bo'lsa, bazaga yozish
-        set(userRef, {
-            username: userName,
-            balance: 0
-        });
-        userBalanceEl.textContent = 0;
-    }
-});
-
-// 2. Bazadan aktiv vazifalarni yuklash
-const tasksRef = ref(db, 'tasks');
-onValue(tasksRef, (snapshot) => {
-    tasksListEl.innerHTML = ""; // Tozalash
-    
-    if (snapshot.exists()) {
-        const tasks = snapshot.val();
-        for (let taskId in tasks) {
-            const task = tasks[taskId];
-            
-            // Vazifa dizayni elementini yaratish
-            const taskCard = document.createElement("div");
-            taskCard.className = "task-card";
-            taskCard.innerHTML = `
-                <div class="task-details">
-                    <h4>${task.title}</h4>
-                    <p>+${task.reward} DEXO</p>
-                </div>
-                <button class="task-btn" data-id="${taskId}" data-link="${task.link}" data-reward="${task.reward}">Bajarish</button>
-            `;
-            tasksListEl.appendChild(taskCard);
-        }
+async function initHome() {
+    if (userData) {
+        const userId = userData.id.toString();
         
-        // Tugmalarga bosish hodisasini ulash
-        initTaskButtons();
-    } else {
-        tasksListEl.innerHTML = `<div class="task-loading">Hozircha vazifalar mavjud emas!</div>`;
-    }
-});
+        // UI elementlarini to'ldirish
+        document.getElementById('user-name').innerText = userData.first_name;
+        document.getElementById('user-id-text').innerText = "ID: " + userId;
+        if (userData.photo_url) {
+            document.getElementById('user-photo').src = userData.photo_url;
+        }
 
-// 3. Vazifani bajarish funksiyasi
-function initTaskButtons() {
-    const buttons = document.querySelectorAll(".task-btn");
-    buttons.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const link = e.target.getAttribute("data-link");
-            const reward = parseInt(e.target.getAttribute("data-reward"));
-            const taskId = e.target.getAttribute("data-id");
-
-            // Kanal havolasini ochish
-            if (tg) {
-                tg.openTelegramLink(link);
+        // 1. Foydalanuvchi ma'lumotlarini MockAPI dan olish yoki yaratish
+        try {
+            const res = await fetch(`${BASE_URL}/users?telegramID=${userId}`);
+            const users = await res.json();
+            
+            if (users.length > 0) {
+                // Foydalanuvchi bor bo'lsa, balansini ko'rsatamiz
+                document.getElementById('balance-amount').innerText = users[0].balance;
             } else {
-                window.open(link, "_blank");
+                // Yangi foydalanuvchi bo'lsa, bazada yaratamiz
+                const createRes = await fetch(`${BASE_URL}/users`, {
+                    method: 'POST',
+                    headers: {'content-type':'application/json'},
+                    body: JSON.stringify({ 
+                        telegramID: userId, 
+                        balance: 0,
+                        name: userData.first_name 
+                    })
+                });
+                if(createRes.ok) document.getElementById('balance-amount').innerText = "0";
             }
+        } catch (e) {
+            console.error("Balansni yuklashda xato:", e);
+        }
 
-            // Real loyihada bot orqali tekshirish (Check) qilinadi. 
-            // Hozircha bosganda balansga tanga qo'shadigan qilamiz:
-            setTimeout(() => {
-                const currentBalance = parseInt(userBalanceEl.textContent);
-                set(ref(db, 'users/' + userId + '/balance'), currentBalance + reward);
-                alert("Vazifa bajarildi! Balansga " + reward + " tanga qo'shildi.");
-            }, 2000); 
-        });
-    });
+        // 2. Mavjud va faol vazifalar sonini hisoblash
+        try {
+            const taskRes = await fetch(`${BASE_URL}/tasks`);
+            const tasks = await taskRes.json();
+            
+            /* Filtrlash shartlari:
+               - completedCount < requiredSubs (Limitga yetmagan)
+               - ownerId != userId (O'zi yaratmagan)
+            */
+            const activeTasks = tasks.filter(task => 
+                parseInt(task.completedCount) < parseInt(task.requiredSubs) && 
+                task.ownerId !== userId
+            );
+
+            document.getElementById('active-tasks-count').innerText = activeTasks.length;
+        } catch (e) {
+            console.error("Vazifalarni sanashda xato:", e);
+            document.getElementById('active-tasks-count').innerText = "0";
+        }
+    } else {
+        // Agar Telegram WebApp dan tashqarida ochilsa (test uchun)
+        document.getElementById('user-name').innerText = "Mehmon";
+        console.warn("Telegram WebApp ma'lumotlari topilmadi.");
+    }
 }
+
+// Sahifa yuklanganda ishga tushirish
+initHome();
+
+// Telegram WebApp interfeysini tayyorlash
+tg.ready();
+tg.expand(); // Ilovani to'liq ekranga yoyish

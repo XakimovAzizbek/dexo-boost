@@ -2,79 +2,67 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dexo Boost - Create Task</title>
-    <link rel="stylesheet" href="create.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOST AI - Vazifa Yaratish</title>
+    <link rel="stylesheet" href="home.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+    <div class="background-blobs"></div>
 
-    <div class="app-container">
-        
-        <header class="header">
-            <div class="page-title">
-                <i class="fa-solid fa-circle-plus"></i>
-                <span>Yangi Vazifa</span>
+    <div class="container">
+        <header class="glass-card user-info">
+            <div class="user-details">
+                <i class="fas fa-plus-circle" style="font-size: 24px; color: #3b82f6;"></i>
+                <h3 style="margin-left: 10px;">Vazifa Yaratish</h3>
             </div>
-            <div class="balance-card">
-                <i class="fa-solid fa-coins coin-icon"></i>
-                <span id="user-balance">0</span> <small>DEXO</small>
+            <div class="balance-badge">
+                <i class="fas fa-coins"></i>
+                <span id="balance-amount">0</span>
             </div>
         </header>
 
-        <main class="content">
-            <div class="info-box">
-                <p><i class="fa-solid fa-circle-info"></i> <strong>Muhim shart:</strong> Vazifa yaratishdan oldin botimizni kanalingizga <strong>Admin</strong> qilishingiz va unga post qo'shish huquqini berishingiz shart!</p>
-                <p class="rate-text">Tarif: 1 ta obunachi = <span class="highlight">4 DEXO</span></p>
+        <div class="glass-card">
+            <p style="margin-bottom: 15px; color: #94a3b8;">Kanal orqali obunachi to'plang</p>
+            
+            <div class="input-group" style="margin-bottom: 20px; text-align: left;">
+                <label style="display:block; margin-bottom: 8px; font-size: 14px;">Kanal Usernamesi:</label>
+                <input type="text" id="channel-username" placeholder="@username" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; outline: none;">
             </div>
 
-            <form id="create-task-form" onsubmit="return false;">
-                <div class="form-group">
-                    <label for="channel-link">Kanal havolasi (yoki @username)</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-link input-icon"></i>
-                        <input type="text" id="channel-link" placeholder="https://t.me/kanal_nomi yoki @kanal_nomi" required>
-                    </div>
-                </div>
+            <div class="input-group" style="margin-bottom: 20px; text-align: left;">
+                <label style="display:block; margin-bottom: 8px; font-size: 14px;">Obunachilar soni (1 ta = 4 tanga):</label>
+                <input type="number" id="subs-count" value="1" min="1" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; outline: none;">
+            </div>
 
-                <div class="form-group">
-                    <label for="sub-count">Kerakli obunachilar soni</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-users input-icon"></i>
-                        <input type="number" id="sub-count" min="5" placeholder="Minimal 5 ta" required>
-                    </div>
-                </div>
+            <div id="total-price" style="margin-bottom: 20px; font-weight: bold; color: #f59e0b;">
+                Jami xarajat: 4 tanga
+            </div>
 
-                <div class="calc-box">
-                    <div class="calc-row">
-                        <span>Umumiy xarajat:</span>
-                        <span id="total-price" class="price-value">0 DEXO</span>
-                    </div>
-                </div>
-
-                <button type="submit" id="submit-btn" class="submit-btn">
-                    <span id="btn-text">Vazifa Yaratish</span>
-                    <div id="btn-loader" class="loader hidden"></div>
-                </button>
-            </form>
-        </main>
-
-        <nav class="bottom-nav">
-            <a href="home.html" class="nav-item">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </a>
-            <a href="create.html" class="nav-item active">
-                <i class="fa-solid fa-circle-plus"></i>
-                <span>Create Task</span>
-            </a>
-            <a href="profile.html" class="nav-item">
-                <i class="fa-solid fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </nav>
-
+            <button onclick="publishTask()" id="btn-create" class="glass-card" style="width: 100%; background: linear-gradient(90deg, #3b82f6, #22c55e); border: none; color: white; padding: 15px; cursor: pointer; font-weight: bold; font-size: 16px;">
+                Vazifani Joylash
+            </button>
+        </div>
     </div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Asosiy</span>
+        </a>
+        <a href="earn.html" class="nav-item">
+            <i class="fas fa-tasks"></i>
+            <span>Bajarish</span>
+        </a>
+        <a href="create.html" class="nav-item active">
+            <i class="fas fa-plus-circle"></i>
+            <span>Yaratish</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
 
     <script type="module" src="create.js"></script>
 </body>
