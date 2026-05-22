@@ -1,7 +1,7 @@
 // home_reklama1.js
 
 // Adsgram reklamani sozlash (Sizning haqiqiy Block ID raqamingizni yozing)
-const AdController = window.Adsgram.init({ blockId: "int-31118" });
+const AdController = window.Adsgram.init({ blockId: "int-31356" });
 
 const statusText = document.getElementById('status-text');
 const loader = document.getElementById('reklama-loader');
