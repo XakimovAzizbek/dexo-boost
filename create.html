@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOOST AI - Vazifa Yaratish</title>
-    <link rel="stylesheet" href="home.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>DEXO BOOST - Yangi Vazifa</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="create.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="background-blobs"></div>
-
     <div class="container">
         <header class="glass-card user-info">
             <div class="user-details">
@@ -23,25 +27,21 @@
         </header>
 
         <div class="glass-card">
-            <p style="margin-bottom: 15px; color: #94a3b8;">Kanal orqali obunachi to'plang</p>
+            <p style="margin-bottom: 15px; color: #94a3b8;">1 ta obunachi = 4 tanga</p>
             
-            <div class="input-group" style="margin-bottom: 20px; text-align: left;">
-                <label style="display:block; margin-bottom: 8px; font-size: 14px;">Kanal Usernamesi:</label>
-                <input type="text" id="channel-username" placeholder="@username" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; outline: none;">
+            <div class="input-group">
+                <label>Kanal Usernamesi:</label>
+                <input type="text" id="channel-username" placeholder="@username">
             </div>
 
-            <div class="input-group" style="margin-bottom: 20px; text-align: left;">
-                <label style="display:block; margin-bottom: 8px; font-size: 14px;">Obunachilar soni (1 ta = 4 tanga):</label>
-                <input type="number" id="subs-count" value="1" min="1" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; outline: none;">
+            <div class="input-group">
+                <label>Obunachilar soni:</label>
+                <input type="number" id="subs-count" value="5" min="1">
             </div>
 
-            <div id="total-price" style="margin-bottom: 20px; font-weight: bold; color: #f59e0b;">
-                Jami xarajat: 4 tanga
-            </div>
+            <div id="total-price">Jami xarajat: 20 tanga</div>
 
-            <button onclick="publishTask()" id="btn-create" class="glass-card" style="width: 100%; background: linear-gradient(90deg, #3b82f6, #22c55e); border: none; color: white; padding: 15px; cursor: pointer; font-weight: bold; font-size: 16px;">
-                Vazifani Joylash
-            </button>
+            <button id="btn-create">Vazifani Joylash</button>
         </div>
     </div>
 
@@ -58,12 +58,8 @@
             <i class="fas fa-plus-circle"></i>
             <span>Yaratish</span>
         </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>Profil</span>
-        </a>
     </nav>
 
-    <script type="module" src="create.js"></script>
+    <script src="create.js"></script>
 </body>
 </html>
