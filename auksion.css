@@ -1,0 +1,19 @@
+/* auksion.css */
+/* Asosiy animatsiya va vizual effektlar */
+.timer-display {
+    animation: pulseTimer 1s infinite alternate;
+}
+
+@keyframes pulseTimer {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.02); }
+}
+
+.pool-display i {
+    animation: spinCoin 3s infinite linear;
+}
+
+@keyframes spinCoin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}

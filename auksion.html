@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEXO BOOST - Auksion</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Auksion uchun maxsus qo'shimcha stillar */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px !important;
+        }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .auction-box {
+            text-align: center;
+            padding: 30px 20px !important;
+        }
+        .timer-display {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ef4444;
+            margin: 15px 0;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+        .pool-display {
+            font-size: 40px;
+            font-weight: 900;
+            color: #f59e0b;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .leader-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 12px;
+            border-radius: 15px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .bid-controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bid-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .bid-input {
+            width: 100px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .btn-auction {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .btn-start {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+        .btn-raise {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn-auction:disabled {
+            background: #475569 !important;
+            box-shadow: none !important;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .btn-auction:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+    </style>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="background-blobs"></div>
+    <div class="container">
+        
+        <header class="glass-card page-header">
+            <a href="profile.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Ortga
+            </a>
+            <div class="balance-badge">
+                <i class="fas fa-coins"></i>
+                <span id="my-balance">0</span>
+            </div>
+        </header>
+
+        <div class="glass-card auction-box">
+            <h2 id="auction-status-title">Auksion Faol Emas</h2>
+            
+            <div class="timer-display" id="auction-timer">20:00</div>
+            
+            <p style="color: #94a3b8; font-size: 14px;">Umumiy jamg'arma (Bank):</p>
+            <div class="pool-display">
+                <i class="fas fa-coins"></i>
+                <span id="auction-pool">0</span>
+            </div>
+
+            <div class="leader-info" id="leader-box">
+                <i class="fas fa-crown" style="color: #f59e0b;"></i> 
+                <span>Hozirgi yetakchi:</span>
+                <b id="auction-leader" style="color: #3b82f6; display: block; margin-top: 4px;">Hech kim</b>
+            </div>
+
+            <div class="bid-controls">
+                <button id="start-btn" class="btn-auction btn-start">
+                    <i class="fas fa-play"></i> Auksionni boshlash (1 Tanga)
+                </button>
+
+                <div id="raise-group" style="display: none;">
+                    <div class="bid-input-group" style="margin-bottom: 10px;">
+                        <span style="color: #cbd5e1; font-size: 14px;">Kamida qo'shish:</span>
+                        <input type="number" id="bid-amount-input" class="bid-input" min="2" value="2" readonly>
+                        <span style="color: #94a3b8;">tanga</span>
+                    </div>
+                    <button id="raise-btn" class="btn-auction btn-raise">
+                        <i class="fas fa-gavel"></i> Garovni Ko'tarish (+2 min)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Asosiy</span>
+        </a>
+        <a href="earn.html" class="nav-item">
+            <i class="fas fa-tasks"></i>
+            <span>Bajarish</span>
+        </a>
+        <a href="create.html" class="nav-item">
+            <i class="fas fa-plus-circle"></i>
+            <span>Yaratish</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script src="auksion.js"></script>
+</body>
+</html>
