@@ -214,8 +214,23 @@ body {
     color: #ffffff;
 }
 
-/* Tugma bosilgandagi animatsiya */
 .home-profile-btn:active {
     transform: scale(0.97);
     background: rgba(59, 130, 246, 0.25) !important;
+}
+
+/* REKLAMA OYNCHASI CSS STILLARI */
+.reklama-container {
+    padding: 0 !important; /* Ichki bo'shliqni yo'qotamiz, reklama to'liq joylashishi uchun */
+    overflow: hidden;
+    height: 180px; /* O'rtacha o'lchamdagi balandlik */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reklama-frame {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: transparent;
+    border-radius: 20px;
 }
