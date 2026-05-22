@@ -10,17 +10,27 @@ const progressBar = document.getElementById('progress-bar');
 
 const KUTISH_VAQTI = 30; // Reklamalar orasidagi tanaffus (soniya)
 
-// Sahifa yuklanishi bilan reklamani boshlash
+// Sahifa yuklanishi bilan darhol reklamani tekshirib ishga tushiramiz
 window.addEventListener('DOMContentLoaded', () => {
-    showAd();
+    // Agar Adsgram yuklanib bo'lgan bo'ls darhol ko'rsatadi, aks holda 200ms kutib qayta urunadi
+    checkAndShowAd();
 });
+
+function checkAndShowAd() {
+    if (window.Adsgram) {
+        showAd();
+    } else {
+        // Agar skript kechikayotgan bo'lsa, har 200 millisoniyada qayta tekshiradi
+        setTimeout(checkAndShowAd, 200);
+    }
+}
 
 // Reklamani ko'rsatish funksiyasi
 async function showAd() {
     // Interfeysni yuklanish holatiga keltirish
-    statusText.innerText = "Reklama tayyorlanmoqda...";
+    statusText.innerText = "Reklama ko'rsatilmoqda...";
     loader.style.display = "block";
-    progressBarWrap.style.style = "none";
+    progressBarWrap.style.display = "none";
     progressBar.style.width = "0%";
 
     try {
@@ -33,13 +43,13 @@ async function showAd() {
         } else {
             // Foydalanuvchi reklamani muddatidan oldin yopib yubordi
             statusText.innerText = "Reklama oxirigacha ko'rilmadi.";
-            startTimer(); // Baribir qayta taymerni yoqamiz
+            startTimer(); 
         }
     } catch (error) {
-        // Reklama topilmadi yoki yuklanishda xatolik (masalan, AdBlock yoquvchi bo'lsa)
+        // Agar reklama tarmog'ida muammo bo'lsa yoki AdBlock bo'lsa
         console.error("Adsgram xatoligi:", error);
-        statusText.innerText = "Xatolik: Reklama yuklanmadi.";
-        startTimer(); // Ma'lum vaqtdan keyin yana urinib ko'rish uchun taymerni boshlaymiz
+        statusText.innerText = "Reklama topilmadi yoki yuklanmadi.";
+        startTimer(); // Baribir 30 soniyadan keyin qayta urinib ko'rish uchun taymerni yoqamiz
     }
 }
 
@@ -55,13 +65,13 @@ function startTimer() {
         timeLeft--;
         statusText.innerText = `Keyingi reklama: ${timeLeft} sek`;
 
-        // Vizual chiziqni to'ldirib borish (foizda)
+        // Vizual chiziqni foizda to'ldirib borish
         const progressPercentage = ((KUTISH_VAQTI - timeLeft) / KUTISH_VAQTI) * 100;
         progressBar.style.width = progressPercentage + "%";
 
         if (timeLeft <= 0) {
             clearInterval(interval);
-            showAd(); // Vaqt tugagach yana reklamani chaqiramiz (Tsikl doimiy aylanadi)
+            showAd(); // 30 soniya tugagach yana avtomatik reklamani ochadi
         }
     }, 1000);
 }
