@@ -14,7 +14,7 @@ const db = firebase.database();
 
 const tg = window.Telegram.WebApp;
 let userId = tg.initDataUnsafe.user?.id ? tg.initDataUnsafe.user.id.toString() : "123456789";
-const BOT_TOKEN = "8756409847:AAF-MdVUIQSf0HaqavXESBvHZ6UV6lsg9rw";
+const BOT_TOKEN = "8848931278:AAE4GIlvFbs7QB0Jdoq91RgqR8tU6eIDK9Y";
 let currentBalance = 0;
 
 // Balansni real vaqtda eshitish
