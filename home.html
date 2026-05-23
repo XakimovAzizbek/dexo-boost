@@ -6,15 +6,18 @@
     <title>DEXO BOOST - Home</title>
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
+
+    <!-- Orqa fon effektlari -->
     <div class="background-blobs"></div>
+
     <div class="container">
+
+        <!-- Header: Foydalanuvchi + Balans -->
         <header class="glass-card user-info">
             <div class="user-details">
                 <img id="user-photo" src="https://via.placeholder.com/50" alt="Avatar">
@@ -29,34 +32,40 @@
             </div>
         </header>
 
+        <!-- Banner -->
         <section class="glass-card banner">
             <h1>DEXO BOOST</h1>
             <p>Haqiqiy obunachilar va tezkor rivojlanish!</p>
         </section>
 
+        <!-- Statistika -->
         <div class="stats-grid">
             <div class="glass-card stat-item">
-                <i class="fas fa-list-check" style="color: #3b82f6;"></i>
+                <i class="fas fa-list-check" style="color:#00e5ff;"></i>
                 <span>Mavjud vazifalar</span>
                 <b id="active-tasks-count">0</b>
             </div>
             <div class="glass-card stat-item">
-                <i class="fas fa-chart-line" style="color: #22c55e;"></i>
+                <i class="fas fa-chart-line" style="color:#22c55e;"></i>
                 <span>Sizning holatingiz</span>
                 <b id="user-status">Faol</b>
             </div>
         </div>
 
+        <!-- Profil tugmasi -->
         <button onclick="window.location.href='profile.html'" class="glass-card home-profile-btn">
             <i class="fas fa-user-gear"></i>
             <span>Mening Profilim</span>
         </button>
 
+        <!-- Reklama -->
         <div class="glass-card reklama-container">
             <iframe src="home_reklama1.html" class="reklama-frame" frameborder="0"></iframe>
         </div>
+
     </div>
 
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item active">
             <i class="fas fa-home"></i>

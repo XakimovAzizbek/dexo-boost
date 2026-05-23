@@ -1,61 +1,104 @@
-/* home.css - DEXO BOOST Umumiy stillari */
+/* home.css - DEXO BOOST — Qayta Dizayn */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     -webkit-user-select: none;
     user-select: none;
 }
 
+:root {
+    --bg:        #060d1a;
+    --surface:   rgba(255,255,255,0.04);
+    --border:    rgba(255,255,255,0.07);
+    --accent1:   #00e5ff;   /* cyan */
+    --accent2:   #a855f7;   /* violet */
+    --accent3:   #22c55e;   /* green */
+    --gold:      #f59e0b;
+    --text-hi:   #f0f6ff;
+    --text-mid:  #94a3b8;
+    --text-lo:   #475569;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius:    18px;
+    --radius-sm: 12px;
+}
+
 body {
-    background: #0f172a;
-    color: #f8fafc;
+    background: var(--bg);
+    color: var(--text-hi);
+    font-family: var(--font-body);
     min-height: 100vh;
     overflow-x: hidden;
-    padding-bottom: 90px;
+    padding-bottom: 100px;
     display: flex;
     justify-content: center;
 }
 
-/* Orqa fondagi neon effektli aylanalar */
+/* ─── Orqa fon ──────────────────────────────────── */
 .background-blobs {
     position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 500px;
-    height: 100%;
+    inset: 0;
     z-index: -1;
-    background: radial-gradient(circle at 10% 20%, rgba(34, 197, 94, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 40%);
+    pointer-events: none;
+    overflow: hidden;
 }
 
-/* Mobil o'lchamdagi konteyner */
+.background-blobs::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: -80px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(0,229,255,0.13) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: driftA 9s ease-in-out infinite alternate;
+}
+
+.background-blobs::after {
+    content: '';
+    position: absolute;
+    bottom: 80px;
+    right: -100px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(168,85,247,0.14) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: driftB 11s ease-in-out infinite alternate;
+}
+
+@keyframes driftA { to { transform: translate(30px, 40px); } }
+@keyframes driftB { to { transform: translate(-30px, -40px); } }
+
+/* ─── Konteyner ─────────────────────────────────── */
 .container {
-    padding: 20px;
+    padding: 18px 16px;
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
 }
 
-/* Shishasimon oyna effekti (Glassmorphism) */
+/* ─── Glass karta ───────────────────────────────── */
 .glass-card {
-    background: rgba(30, 41, 59, 0.45);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* Profil qismi */
+/* ─── Header / Foydalanuvchi ────────────────────── */
 .user-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 14px 18px;
 }
 
 .user-details {
@@ -65,166 +108,211 @@ body {
 }
 
 .user-details img {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    border: 2px solid #3b82f6;
     object-fit: cover;
+    border: 2px solid transparent;
+    background: linear-gradient(var(--bg), var(--bg)) padding-box,
+                linear-gradient(135deg, var(--accent1), var(--accent2)) border-box;
+    box-shadow: 0 0 14px rgba(0,229,255,0.25);
 }
 
 .user-details h3 {
+    font-family: var(--font-head);
     font-size: 15px;
-    font-weight: 600;
-    color: #f8fafc;
+    font-weight: 700;
+    color: var(--text-hi);
+    letter-spacing: 0.2px;
 }
 
 .user-details p {
-    font-size: 12px;
-    color: #64748b;
-    margin-top: 1px;
+    font-size: 11px;
+    color: var(--text-lo);
+    margin-top: 2px;
+    font-family: var(--font-body);
 }
 
-/* Tanga balansi */
+/* ─── Balans badge ──────────────────────────────── */
 .balance-badge {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    padding: 8px 14px;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 14px;
-    color: #ffffff;
     display: flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+    background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(217,119,6,0.12));
+    border: 1px solid rgba(245,158,11,0.35);
+    padding: 9px 14px;
+    border-radius: 50px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 14px;
+    color: #fbbf24;
+    box-shadow: 0 0 16px rgba(245,158,11,0.15);
+    cursor: default;
+    transition: box-shadow 0.2s;
+}
+.balance-badge:hover {
+    box-shadow: 0 0 24px rgba(245,158,11,0.3);
+}
+.balance-badge i {
+    font-size: 15px;
+    color: #f59e0b;
 }
 
-/* Banner qismi */
+/* ─── Banner ────────────────────────────────────── */
 .banner {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 41, 59, 0.5));
+    position: relative;
     text-align: center;
-    padding: 24px 20px;
+    padding: 28px 20px;
+    overflow: hidden;
+    border-image: linear-gradient(135deg, rgba(0,229,255,0.25), rgba(168,85,247,0.25)) 1;
+}
+
+.banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,229,255,0.06), rgba(168,85,247,0.08));
+    border-radius: inherit;
+    pointer-events: none;
 }
 
 .banner h1 {
-    font-size: 24px;
+    font-family: var(--font-head);
+    font-size: 30px;
     font-weight: 800;
-    background: linear-gradient(90deg, #3b82f6, #22c55e);
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--accent1) 0%, var(--accent2) 50%, var(--accent3) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 6px;
-    letter-spacing: 0.5px;
+    background-clip: text;
+    margin-bottom: 8px;
+    text-transform: uppercase;
 }
 
 .banner p {
     font-size: 13px;
-    color: #cbd5e1;
+    color: var(--text-mid);
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
-/* Statistika qismlari */
+/* ─── Statistika ────────────────────────────────── */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 12px;
+    margin-bottom: 14px;
 }
 
 .stat-item {
     text-align: center;
-    font-size: 13px;
-    color: #94a3b8;
-    padding: 16px;
+    padding: 18px 14px;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.stat-item:hover { transform: translateY(-2px); }
+
+.stat-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    opacity: 0.3;
 }
 
 .stat-item i {
-    font-size: 20px;
+    font-size: 22px;
     margin-bottom: 8px;
+    display: block;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+.stat-item span {
+    font-size: 11px;
+    color: var(--text-lo);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
     display: block;
 }
 
 .stat-item b {
     display: block;
-    font-size: 18px;
-    margin-top: 6px;
-    color: #f8fafc;
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 5px;
+    color: var(--text-hi);
 }
 
-/* Pastki doimiy Navigatsiya paneli (Bottom Nav) */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 500px;
-    height: 75px;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 100;
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #64748b;
-    text-decoration: none;
-    font-size: 11px;
-    font-weight: 500;
-    gap: 4px;
-    transition: color 0.2s ease;
-    width: 60px;
-}
-
-.nav-item i {
-    font-size: 20px;
-}
-
-.nav-item.active {
-    color: #3b82f6;
-}
-
-/* PROFILGA KIRISH YANGI TUGMA STILI */
+/* ─── Profil Tugma ──────────────────────────────── */
 .home-profile-btn {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 16px !important;
-    margin-top: 5px;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(15, 23, 42, 0.4)) !important;
-    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+    gap: 10px;
+    padding: 16px 20px !important;
     cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease;
+    background: linear-gradient(135deg, rgba(0,229,255,0.10), rgba(168,85,247,0.10)) !important;
+    border: 1px solid rgba(0,229,255,0.22) !important;
+    border-radius: var(--radius) !important;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.18s cubic-bezier(.34,1.56,.64,1),
+                box-shadow 0.18s ease,
+                border-color 0.18s ease;
+}
+
+.home-profile-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,229,255,0.08), rgba(168,85,247,0.08));
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.home-profile-btn:hover::before { opacity: 1; }
+
+.home-profile-btn:hover {
+    box-shadow: 0 0 20px rgba(0,229,255,0.15);
+    border-color: rgba(0,229,255,0.4) !important;
+}
+
+.home-profile-btn:active {
+    transform: scale(0.96) !important;
+    box-shadow: 0 0 10px rgba(0,229,255,0.1) !important;
 }
 
 .home-profile-btn i {
     font-size: 18px;
-    color: #3b82f6;
+    color: var(--accent1);
+    filter: drop-shadow(0 0 6px rgba(0,229,255,0.5));
 }
 
 .home-profile-btn span {
+    font-family: var(--font-head);
     font-size: 15px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-hi);
+    letter-spacing: 0.4px;
 }
 
-.home-profile-btn:active {
-    transform: scale(0.97);
-    background: rgba(59, 130, 246, 0.25) !important;
-}
-
-/* REKLAMA OYNCHASI CSS STILLARI */
+/* ─── Reklama ───────────────────────────────────── */
 .reklama-container {
-    padding: 0 !important; /* Ichki bo'shliqni yo'qotamiz, reklama to'liq joylashishi uchun */
+    padding: 0 !important;
     overflow: hidden;
-    height: 180px; /* O'rtacha o'lchamdagi balandlik */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 180px;
+    border: 1px solid rgba(255,255,255,0.08);
 }
 
 .reklama-frame {
@@ -232,5 +320,97 @@ body {
     height: 100%;
     display: block;
     background: transparent;
-    border-radius: 20px;
+    border-radius: calc(var(--radius) - 1px);
+}
+
+/* ─── Bottom Nav ────────────────────────────────── */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: 72px;
+    background: rgba(6, 13, 26, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    padding: 0 8px;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-lo);
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 500;
+    gap: 4px;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    transition: color 0.2s ease, background 0.2s ease, transform 0.18s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+    min-width: 56px;
+    letter-spacing: 0.3px;
+}
+
+.nav-item i {
+    font-size: 20px;
+    transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), filter 0.2s;
+}
+
+.nav-item:hover {
+    color: var(--text-mid);
+    background: rgba(255,255,255,0.04);
+}
+
+.nav-item:active {
+    transform: scale(0.90);
+}
+
+.nav-item.active {
+    color: var(--accent1);
+}
+
+.nav-item.active i {
+    filter: drop-shadow(0 0 8px var(--accent1));
+    transform: translateY(-1px);
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 3px;
+    background: var(--accent1);
+    border-radius: 3px;
+    box-shadow: 0 0 8px var(--accent1);
+}
+
+/* ─── Animatsiyalar ─────────────────────────────── */
+.container > * {
+    animation: fadeUp 0.45s ease both;
+}
+.container > *:nth-child(1) { animation-delay: 0.00s; }
+.container > *:nth-child(2) { animation-delay: 0.07s; }
+.container > *:nth-child(3) { animation-delay: 0.14s; }
+.container > *:nth-child(4) { animation-delay: 0.21s; }
+.container > *:nth-child(5) { animation-delay: 0.28s; }
+.container > *:nth-child(6) { animation-delay: 0.35s; }
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
