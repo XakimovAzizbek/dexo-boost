@@ -1,6 +1,6 @@
 // home_reklama1.js
 
-const BLOCK_ID = "int-31356"; // ← partner.adsgram.ai dan haqiqiy ID ni yozing!
+const BLOCK_ID     = "int-31356"; // ← partner.adsgram.ai dan HAQIQIY ID ni yozing!
 const KUTISH_VAQTI = 30;
 
 let AdController = null;
@@ -11,63 +11,55 @@ const progressBarWrap = document.getElementById('progress-bar-wrap');
 const progressBar     = document.getElementById('progress-bar');
 const debugText       = document.getElementById('debug-text');
 
-function showDebug(msg) {
-    console.log("[ADSGRAM]", msg);
+function log(msg) {
+    console.log('[ADSGRAM]', msg);
     if (debugText) debugText.innerText = msg;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // SDK yuklanishini kutish
-    waitForAdsgram(0);
+    waitForSDK(0);
 });
 
-function waitForAdsgram(attempt) {
-    if (attempt > 20) {
-        showDebug("❌ AdsGram SDK 10 soniyada yuklanmadi.");
-        return;
-    }
+function waitForSDK(n) {
+    if (n > 20) { log("❌ AdsGram SDK 10s da yuklanmadi"); return; }
     if (typeof window.Adsgram === 'undefined') {
-        setTimeout(() => waitForAdsgram(attempt + 1), 500);
+        setTimeout(() => waitForSDK(n + 1), 500);
         return;
     }
-    initAdsgram();
+    startAdsgram();
 }
 
-function initAdsgram() {
+function startAdsgram() {
     try {
         AdController = window.Adsgram.init({
             blockId: BLOCK_ID,
-            debug: true,                    // ✅ Ishlayotganida FALSE qiling
+            debug: true,                     // ✅ Reklama ishlasa FALSE qiling
             debugBannerType: "RewardedVideo"
         });
-        showDebug("✅ AdsGram tayyor!");
+        log("✅ AdsGram init muvaffaqiyatli!");
         showAd();
     } catch (e) {
-        showDebug("❌ init xatoligi: " + e.message);
+        log("❌ init xatoligi: " + e.message);
     }
 }
 
 async function showAd() {
-    if (!AdController) {
-        showDebug("❌ AdController yo'q");
-        return;
-    }
+    if (!AdController) { log("❌ AdController yo'q"); return; }
 
     statusText.innerText = "Reklama yuklanmoqda...";
     loader.style.display = "block";
     progressBarWrap.style.display = "none";
-    progressBar.style.width = "0%";
     if (debugText) debugText.innerText = "";
 
     try {
         const result = await AdController.show();
-        if (result && result.done) {
+        if (result?.done) {
             statusText.innerText = "✅ Rahmat! Mukofot berildi.";
         } else {
-            statusText.innerText = "⚠️ Reklama oxirigacha ko'rilmadi.";
+            statusText.innerText = "⚠️ Reklama o'tkazib yuborildi.";
         }
-    } catch (error) {
-        showDebug("❌ " + (error?.description || JSON.stringify(error)));
+    } catch (err) {
+        log("❌ " + (err?.description || JSON.stringify(err)));
         statusText.innerText = "Reklama yuklanmadi.";
     } finally {
         startTimer();
@@ -77,17 +69,15 @@ async function showAd() {
 function startTimer() {
     loader.style.display = "none";
     progressBarWrap.style.display = "block";
+    let t = KUTISH_VAQTI;
+    statusText.innerText = `Keyingi reklama: ${t} sek`;
 
-    let timeLeft = KUTISH_VAQTI;
-    statusText.innerText = `Keyingi reklama: ${timeLeft} sek`;
-
-    const interval = setInterval(() => {
-        timeLeft--;
-        progressBar.style.width = ((KUTISH_VAQTI - timeLeft) / KUTISH_VAQTI * 100) + "%";
-        statusText.innerText = `Keyingi reklama: ${timeLeft} sek`;
-
-        if (timeLeft <= 0) {
-            clearInterval(interval);
+    const iv = setInterval(() => {
+        t--;
+        progressBar.style.width = ((KUTISH_VAQTI - t) / KUTISH_VAQTI * 100) + "%";
+        statusText.innerText = `Keyingi reklama: ${t} sek`;
+        if (t <= 0) {
+            clearInterval(iv);
             if (debugText) debugText.innerText = "";
             showAd();
         }
