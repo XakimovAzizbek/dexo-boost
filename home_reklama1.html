@@ -6,10 +6,32 @@
     <title>DEXO BOOST - Reklama</title>
     <link rel="stylesheet" href="home_reklama1.css">
 
-    <!-- 1. TELEGRAM WEBAPP (AdsGram uchun kerak) -->
+    <!-- 1. TELEGRAM WEBAPP -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <!-- 2. ADSGRAM SDK -->
+    <!-- 2. BRAUZERDA initData BO'SH BO'LSA, FAKE QO'YAMIZ (AdsGram uchun) -->
+    <script>
+        if (!window.Telegram || !window.Telegram.WebApp || !window.Telegram.WebApp.initData) {
+            // Brauzerda ochilgan - fake initData yozamiz
+            var fakeUser = encodeURIComponent(JSON.stringify({
+                id: 123456789,
+                first_name: "WebUser",
+                username: "webuser",
+                language_code: "uz"
+            }));
+            if (!window.Telegram) window.Telegram = {};
+            if (!window.Telegram.WebApp) window.Telegram.WebApp = {};
+            window.Telegram.WebApp.initData =
+                "user=" + fakeUser + "&auth_date=9999999999&hash=0000000000000000000000000000000000000000000000000000000000000000";
+            window.Telegram.WebApp.initDataUnsafe = {
+                user: { id: 123456789, first_name: "WebUser", username: "webuser" }
+            };
+            if (!window.Telegram.WebApp.ready) window.Telegram.WebApp.ready = function(){};
+            if (!window.Telegram.WebApp.expand) window.Telegram.WebApp.expand = function(){};
+        }
+    </script>
+
+    <!-- 3. ADSGRAM SDK (initData tayyor bo'lgandan keyin) -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 <body>
@@ -20,11 +42,9 @@
         <div class="progress-container" id="progress-bar-wrap" style="display: none;">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
-        <!-- Debug uchun xato xabari -->
-        <p id="debug-text" style="color:red;font-size:12px;margin-top:10px;"></p>
+        <p id="debug-text" style="color:red;font-size:12px;margin-top:10px;text-align:center;"></p>
     </div>
 
-    <!-- 3. JS ENG OXIRIDA -->
     <script src="home_reklama1.js"></script>
 </body>
 </html>
