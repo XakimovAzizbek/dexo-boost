@@ -1,77 +1,94 @@
 // home_reklama1.js
 
-// Adsgram reklamani sozlash (Sizning haqiqiy Block ID raqamingizni yozing)
-const AdController = window.Adsgram.init({ blockId: "int-31356" });
+const BLOCK_ID = "int-31356"; // ← O'ZGARTIRING: partner.adsgram.ai dan olingan haqiqiy ID
+const KUTISH_VAQTI = 30;      // Reklamalar orasidagi tanaffus (soniya)
 
-const statusText = document.getElementById('status-text');
-const loader = document.getElementById('reklama-loader');
+let AdController = null;
+
+const statusText  = document.getElementById('status-text');
+const loader      = document.getElementById('reklama-loader');
 const progressBarWrap = document.getElementById('progress-bar-wrap');
 const progressBar = document.getElementById('progress-bar');
+const debugText   = document.getElementById('debug-text');
 
-const KUTISH_VAQTI = 30; // Reklamalar orasidagi tanaffus (soniya)
+function showDebug(msg) {
+    console.log("[ADSGRAM DEBUG]", msg);
+    if (debugText) debugText.innerText = msg;
+}
 
-// Sahifa yuklanishi bilan darhol reklamani tekshirib ishga tushiramiz
-window.addEventListener('DOMContentLoaded', () => {
-    // Agar Adsgram yuklanib bo'lgan bo'ls darhol ko'rsatadi, aks holda 200ms kutib qayta urunadi
-    checkAndShowAd();
+// Sahifa tayyor bo'lgach ishga tushir
+document.addEventListener('DOMContentLoaded', () => {
+    initAdsgram();
 });
 
-function checkAndShowAd() {
-    if (window.Adsgram) {
+function initAdsgram() {
+    // AdsGram SDK yuklanganmi?
+    if (typeof window.Adsgram === 'undefined') {
+        showDebug("❌ AdsGram SDK yuklanmadi. Internet aloqasini tekshiring.");
+        setTimeout(initAdsgram, 500); // 0.5 sek kutib qayta urinish
+        return;
+    }
+
+    try {
+        AdController = window.Adsgram.init({
+            blockId: BLOCK_ID,
+            debug: true,          // ← Reklama ishlayotganidan keyin FALSE qiling
+            debugBannerType: "RewardedVideo"
+        });
+        showDebug("✅ AdsGram tayyor. Reklama chaqirilmoqda...");
         showAd();
-    } else {
-        // Agar skript kechikayotgan bo'lsa, har 200 millisoniyada qayta tekshiradi
-        setTimeout(checkAndShowAd, 200);
+    } catch (e) {
+        showDebug("❌ AdsGram init xatoligi: " + e.message);
     }
 }
 
-// Reklamani ko'rsatish funksiyasi
 async function showAd() {
-    // Interfeysni yuklanish holatiga keltirish
-    statusText.innerText = "Reklama ko'rsatilmoqda...";
+    if (!AdController) {
+        showDebug("❌ AdController tayyor emas");
+        return;
+    }
+
+    statusText.innerText = "Reklama yuklanmoqda...";
     loader.style.display = "block";
     progressBarWrap.style.display = "none";
     progressBar.style.width = "0%";
 
     try {
-        // Adsgramdan reklamani chaqiramiz va natijani kutamiz
+        showDebug("📡 AdController.show() chaqirilmoqda...");
         const result = await AdController.show();
-        
+
+        showDebug("✅ Reklama natijasi: done=" + result?.done);
+
         if (result && result.done) {
-            // Reklama muvaffaqiyatli to'liq ko'rildi
-            startTimer();
+            statusText.innerText = "✅ Rahmat! Mukofot berildi.";
         } else {
-            // Foydalanuvchi reklamani muddatidan oldin yopib yubordi
-            statusText.innerText = "Reklama oxirigacha ko'rilmadi.";
-            startTimer(); 
+            statusText.innerText = "⚠️ Reklama oxirigacha ko'rilmadi.";
         }
     } catch (error) {
-        // Agar reklama tarmog'ida muammo bo'lsa yoki AdBlock bo'lsa
-        console.error("Adsgram xatoligi:", error);
-        statusText.innerText = "Reklama topilmadi yoki yuklanmadi.";
-        startTimer(); // Baribir 30 soniyadan keyin qayta urinib ko'rish uchun taymerni yoqamiz
+        showDebug("❌ show() xatoligi: " + JSON.stringify(error));
+        statusText.innerText = "Reklama topilmadi: " + (error?.description || "noma'lum xato");
+    } finally {
+        startTimer();
     }
 }
 
-// 30 soniyalik taymerni boshqarish funksiyasi
 function startTimer() {
-    loader.style.display = "none";         // Aylana yuklanishni o'chiramiz
-    progressBarWrap.style.display = "block"; // Chiziqli progressni yoqamiz
-    
+    loader.style.display = "none";
+    progressBarWrap.style.display = "block";
+
     let timeLeft = KUTISH_VAQTI;
     statusText.innerText = `Keyingi reklama: ${timeLeft} sek`;
 
     const interval = setInterval(() => {
         timeLeft--;
+        const pct = ((KUTISH_VAQTI - timeLeft) / KUTISH_VAQTI) * 100;
+        progressBar.style.width = pct + "%";
         statusText.innerText = `Keyingi reklama: ${timeLeft} sek`;
-
-        // Vizual chiziqni foizda to'ldirib borish
-        const progressPercentage = ((KUTISH_VAQTI - timeLeft) / KUTISH_VAQTI) * 100;
-        progressBar.style.width = progressPercentage + "%";
 
         if (timeLeft <= 0) {
             clearInterval(interval);
-            showAd(); // 30 soniya tugagach yana avtomatik reklamani ochadi
+            if (debugText) debugText.innerText = "";
+            showAd();
         }
     }, 1000);
 }

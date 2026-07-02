@@ -5,20 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEXO BOOST - Reklama</title>
     <link rel="stylesheet" href="home_reklama1.css">
+
+    <!-- 1. TELEGRAM WEBAPP (AdsGram uchun kerak) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- 2. ADSGRAM SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 <body>
 
     <div class="reklama-box">
         <p id="status-text">Reklama yuklanmoqda...</p>
-        
         <div class="loader" id="reklama-loader"></div>
-        
         <div class="progress-container" id="progress-bar-wrap" style="display: none;">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
+        <!-- Debug uchun xato xabari -->
+        <p id="debug-text" style="color:red;font-size:12px;margin-top:10px;"></p>
     </div>
 
+    <!-- 3. JS ENG OXIRIDA -->
     <script src="home_reklama1.js"></script>
 </body>
 </html>
