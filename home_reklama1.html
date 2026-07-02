@@ -7,51 +7,88 @@
     <link rel="stylesheet" href="home_reklama1.css">
 
     <!--
-      AdsGram SDK ichida @tma.js/sdk ishlatadi.
-      U launch parametrlarni 2 joydan qidiradi:
-        1) window.Telegram.WebApp.initData  (Telegram WebView ichida)
-        2) URL hash: #tgWebAppData=...      (brauzerda)
-
-      window.Telegram.WebApp.initData read-only bo'lgani uchun o'zgartirib bo'lmaydi.
-      Shuning uchun SDKlar yuklanishidan OLDIN URL hash ga yozamiz.
+        telegram-web-app.js YUKLAMAYMIZ — u initData ni read-only qilib bo'sh qo'yadi.
+        O'zimiz to'liq mock qilamiz, shunda AdsGram SDK uni o'qiydi.
     -->
-
-    <!-- 1. HASH GA FAKE TELEGRAM DATA (HAMMA SKRIPTDAN OLDIN) -->
     <script>
         (function () {
-            // Allaqachon Telegram hash bo'lsa, hech narsa qilmaymiz
-            if (window.location.hash.includes('tgWebAppData')) return;
+            // Haqiqiy Telegram muhitida bo'lsak — hech narsa qilmaymiz
+            if (window.TelegramWebviewProxy || (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData)) {
+                return;
+            }
 
-            var fakeUser = JSON.stringify({
-                id: 987654321,
-                first_name: "WebUser",
-                username: "webuser",
-                language_code: "uz"
-            });
-
-            // initData formatida yozamiz (xuddi Telegram yuboradigan kabi)
             var fakeInitData =
-                'user=' + encodeURIComponent(fakeUser) +
+                'user=' + encodeURIComponent(JSON.stringify({
+                    id: 987654321,
+                    first_name: 'WebUser',
+                    username: 'webuser',
+                    language_code: 'uz',
+                    allows_write_to_pm: true
+                })) +
                 '&auth_date=9999999999' +
                 '&hash=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 
-            var fakeHash =
-                'tgWebAppData=' + encodeURIComponent(fakeInitData) +
-                '&tgWebAppVersion=7.7' +
-                '&tgWebAppPlatform=android';
+            // To'liq Telegram.WebApp mock
+            window.Telegram = {
+                WebApp: {
+                    initData: fakeInitData,
+                    initDataUnsafe: {
+                        user: { id: 987654321, first_name: 'WebUser', username: 'webuser' },
+                        auth_date: '9999999999',
+                        hash: 'aaaaaaaaaa'
+                    },
+                    version: '7.7',
+                    platform: 'android',
+                    colorScheme: 'dark',
+                    themeParams: {
+                        bg_color: '#1c1c1e',
+                        text_color: '#ffffff',
+                        button_color: '#2481cc',
+                        button_text_color: '#ffffff'
+                    },
+                    isExpanded: true,
+                    viewportHeight: window.innerHeight,
+                    viewportStableHeight: window.innerHeight,
+                    headerColor: '#1c1c1e',
+                    backgroundColor: '#1c1c1e',
+                    isClosingConfirmationEnabled: false,
+                    BackButton: {
+                        isVisible: false,
+                        show: function () {},
+                        hide: function () {},
+                        onClick: function () {}
+                    },
+                    MainButton: {
+                        text: '',
+                        color: '#2481cc',
+                        textColor: '#ffffff',
+                        isVisible: false,
+                        isActive: true,
+                        show: function () {},
+                        hide: function () {},
+                        onClick: function () {}
+                    },
+                    HapticFeedback: {
+                        impactOccurred: function () {},
+                        notificationOccurred: function () {},
+                        selectionChanged: function () {}
+                    },
+                    ready: function () {},
+                    expand: function () {},
+                    close: function () {},
+                    sendData: function () {},
+                    openLink: function (url) { window.open(url, '_blank'); },
+                    openTelegramLink: function (url) { window.open(url, '_blank'); },
+                    showAlert: function (msg, cb) { alert(msg); if (cb) cb(); },
+                    showConfirm: function (msg, cb) { var r = confirm(msg); if (cb) cb(r); }
+                }
+            };
 
-            // Sahifani qayta yuklamasdan hash ni o'zgartiramiz
-            history.replaceState(
-                null, '',
-                window.location.pathname + window.location.search + '#' + fakeHash
-            );
+            console.log('[MOCK] Telegram.WebApp mock qo\'yildi. initData:', fakeInitData.substring(0, 50) + '...');
         })();
     </script>
 
-    <!-- 2. TELEGRAM WEBAPP SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-    <!-- 3. ADSGRAM SDK (endi hash da data bor) -->
+    <!-- AdsGram SDK — endi window.Telegram.WebApp tayyor -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 <body>
