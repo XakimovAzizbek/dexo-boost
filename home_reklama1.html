@@ -6,10 +6,8 @@
     <title>DEXO BOOST - Reklama</title>
     <link rel="stylesheet" href="home_reklama1.css">
 
-    <!--
-        telegram-web-app.js YUKLAMAYMIZ — u initData ni read-only qilib bo'sh qo'yadi.
-        O'zimiz to'liq mock qilamiz, shunda AdsGram SDK uni o'qiydi.
-    -->
+    <!-- ⚠️ Agar Telegram botda ishlatilsa, bu mock qismini O'CHIRING! -->
+    <!-- Faqat web brauzerda test qilish uchun -->
     <script>
         (function () {
             // Haqiqiy Telegram muhitida bo'lsak — hech narsa qilmaymiz
@@ -28,7 +26,6 @@
                 '&auth_date=9999999999' +
                 '&hash=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 
-            // To'liq Telegram.WebApp mock
             window.Telegram = {
                 WebApp: {
                     initData: fakeInitData,
@@ -84,11 +81,11 @@
                 }
             };
 
-            console.log('[MOCK] Telegram.WebApp mock qo\'yildi. initData:', fakeInitData.substring(0, 50) + '...');
+            console.log('[MOCK] Telegram.WebApp mock qo\'yildi');
         })();
     </script>
 
-    <!-- AdsGram SDK — endi window.Telegram.WebApp tayyor -->
+    <!-- AdsGram SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 <body>
